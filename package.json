@@ -1,19 +1,19 @@
- {
+{
     "name": "training-portal-backend",
     "version": "1.0.0",
     "description": "A simple Express.js application with MySQL and Sequelize",
     "main": "index.js",
     "scripts": {
-      "start": "node src/index.js",
-      "dev": "nodemon index.js"
+        "start": "node src/index.js",
+        "dev": "nodemon index.js"
     },
     "dependencies": {
-      "dotenv": "^10.0.0",
-      "express": "^4.17.1",
-      "mysql2": "^2.3.3",
-      "sequelize": "^6.6.2"
+        "dotenv": "^10.0.0",
+        "express": "^4.21.0",
+        "mysql2": "^2.3.3",
+        "sequelize": "^6.37.3"
     },
     "devDependencies": {
-      "nodemon": "^2.0.12"
+        "nodemon": "^2.0.22"
     }
-  }
+}
