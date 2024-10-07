@@ -9,6 +9,9 @@ const trainerRoutes = require('./routes/trainer');
 const Trainer = require('./models/trainer'); 
 const assessmentRoutes = require('./routes/assessment');
 const assessment = require('./models/assessments'); 
+const rolesRoutes = require('./routes/roles');
+const role = require('./models/roles'); 
+
 
 dotenv.config();
 
@@ -20,6 +23,8 @@ app.use('/api/users', userRoutes); // Mount user routes
 app.use('/api/trainee',traineeRoutes);
 app.use('/api/trainer',trainerRoutes);
 app.use('/api/assessments',assessmentRoutes);
+app.use('/api/roles',rolesRoutes);
+
 
 const startServer = async () => {
     try {
@@ -31,6 +36,7 @@ const startServer = async () => {
         // await Trainer.sync({force: true});
         // await Trainee.sync();
         await assessment.sync({force: true});
+        await role.sync({force: true});
 
         app.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);
