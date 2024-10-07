@@ -27,6 +27,8 @@ const startServer = async () => {
 
         // Sync models
         await User.sync(); // Ensure the User model is synchronized with the database
+        // await Trainer.sync({force: true});
+        // await Trainee.sync();
 
         app.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);
