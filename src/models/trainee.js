@@ -12,6 +12,6 @@ const Trainee = sequelize.define('Trainee',{
     role: { type: DataTypes.STRING, allowNull: false },
     status: { type: DataTypes.STRING, allowNull: false },
 },{
-    timestamp:true,
+    timestamps:true,
 });
 module.exports = Trainee;
