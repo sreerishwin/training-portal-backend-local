@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Trainee = require('../models/trainee');
+// const authenticateToken = require('../middlewares/auth')
+
 
 // Create Trainee
-router.post('/', async (req, res) => {
+router.post('/',async (req, res) => {
     try {
         const trainee = await Trainee.create(req.body);
         res.status(201).json(trainee);
@@ -13,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get All Trainees
-router.get('/', async (req, res) => {
+router.get('/',async (req, res) => {
     try {
         const trainees = await Trainee.findAll();
         res.json(trainees);
@@ -44,7 +46,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete Trainee
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',async (req, res) => {
     try {
         await Trainee.destroy({ where: { id: req.params.id } });
         res.json({ message: 'Trainee deleted' });
