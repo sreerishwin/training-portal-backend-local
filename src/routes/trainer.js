@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Trainer = require('../models/trainer');
-const authenticateToken = require('../middlewares/auth')
+// const authenticateToken = require('../middlewares/auth')
 
 
-// Create Trainer
-router.post('/', authenticateToken,async (req, res) => {
+router.post('/',async (req, res) => {
     try {
         const trainer = await Trainer.create(req.body);
         res.status(201).json(trainer);
@@ -14,8 +13,17 @@ router.post('/', authenticateToken,async (req, res) => {
     }
 });
 
-// Get All Trainers
-router.get('/', authenticateToken,async (req, res) => {
+router.get('/count',async(req,res)=> {
+    try{
+        const trainerCount = await Trainer.count();
+        res.status(200).json({count:trainerCount});
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+    
+});
+
+router.get('/', async (req, res) => {
     try {
         const trainers = await Trainer.findAll();
         res.json(trainers);
@@ -24,8 +32,7 @@ router.get('/', authenticateToken,async (req, res) => {
     }
 });
 
-// Get Single Trainer
-router.get('/:id',authenticateToken, async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const trainer = await Trainer.findByPk(req.params.id);
         if (trainer) res.json(trainer);
@@ -35,8 +42,7 @@ router.get('/:id',authenticateToken, async (req, res) => {
     }
 });
 
-// Update Trainer
-router.put('/:id',authenticateToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const trainer = await Trainer.update(req.body, { where: { id: req.params.id } });
         res.json(trainer);
@@ -45,8 +51,7 @@ router.put('/:id',authenticateToken, async (req, res) => {
     }
 });
 
-// Delete Trainer
-router.delete('/:id',authenticateToken, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         await Trainer.destroy({ where: { id: req.params.id } });
         res.json({ message: 'Trainer deleted' });

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Roles = require('../models/roles');
-const authenticateToken = require('../middlewares/auth')
+// const authenticateToken = require('../middlewares/auth')
 
 
-router.post('/', authenticateToken,async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const roles = await Roles.create(req.body);
         res.status(201).json(roles);
@@ -13,7 +13,7 @@ router.post('/', authenticateToken,async (req, res) => {
     }
 });
 
-router.get('/',authenticateToken,async(req,res) =>{
+router.get('/',async(req,res) =>{
     try{
         const roles = await Roles.findAll();
         res.status(201).json(roles);
@@ -22,7 +22,7 @@ router.get('/',authenticateToken,async(req,res) =>{
     }
 });
 
-router.get('/:id',authenticateToken,async(req,res) =>{
+router.get('/:id',async(req,res) =>{
     try{
         const roles = await Roles.findByPk(req.params.id);
         if(roles) res.status(201).json(roles);
@@ -34,7 +34,7 @@ router.get('/:id',authenticateToken,async(req,res) =>{
 
 
 
-router.put('/:id',authenticateToken,async(req,res)=>{
+router.put('/:id',async(req,res)=>{
     try{
         const roles = await Roles.update(req.body,{where :{id:req.params.id}});
         res.json(roles);
@@ -44,7 +44,7 @@ router.put('/:id',authenticateToken,async(req,res)=>{
 });
 
 
-router.delete('/:id',authenticateToken,async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
     try{
         await Roles.destroy({where:{id:req.params.id}});
         res.json({message:'Role deleted'});

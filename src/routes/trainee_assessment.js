@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Assessment = require('../models/assessments');
+const t_assessments = require('../models/trainee_assessments');
 // const authenticateToken = require('../middlewares/auth')
 
 router.post('/',async (req, res) => {
     try {
-        const assessment = await Assessment.create(req.body);
-        res.status(201).json(assessment);
+        const t_assessment = await t_assessments.create(req.body);
+        res.status(201).json(t_assessment);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -14,8 +14,8 @@ router.post('/',async (req, res) => {
 
 router.get('/count',async(req,res)=> {
     try{
-        const assessmentCount = await Assessment.count();
-        res.status(200).json({count:assessmentCount});
+        const t_assessmentCount = await t_assessments.count();
+        res.status(200).json({count:t_assessmentCount});
     }catch(err){
         res.status(500).json({error:err.message});
     }
@@ -24,8 +24,8 @@ router.get('/count',async(req,res)=> {
 
 router.get('/',async(req,res) =>{
     try{
-        const assessment = await Assessment.findAll();
-        res.status(201).json(assessment);
+        const t_assessment = await t_assessments.findAll();
+        res.status(201).json(t_assessment);
     } catch(err){
         res.status(500).json({error:err.message});
     }
@@ -33,9 +33,9 @@ router.get('/',async(req,res) =>{
 
 router.get('/:id',async(req,res) =>{
     try{
-        const assessment = await Assessment.findByPk(req.params.id);
-        if(assessment) res.status(201).json(assessment);
-        else res.status(404).json({error:'Assesssment not found.'});
+        const t_assessment = await t_assessments.findByPk(req.params.id);
+        if(t_assessment) res.status(201).json(t_assessment);
+        else res.status(404).json({error:'Trainee assessment not found.'});
     }catch(err){
         res.status(500).json({eror:err.message});
     }
@@ -44,8 +44,8 @@ router.get('/:id',async(req,res) =>{
 
 router.put('/:id',async(req,res)=>{
     try{
-        const assessment = await Assessment.update(req.body,{where :{id:req.params.id}});
-        res.json(assessment);
+        const t_assessment = await t_assessments.update(req.body,{where :{id:req.params.id}});
+        res.json(t_assessment);
     }catch(err){
         req.status(500).json({error:err.message});
     }
@@ -54,8 +54,8 @@ router.put('/:id',async(req,res)=>{
 
 router.delete('/:id',async(req,res)=>{
     try{
-        await Assessment.destroy({where:{id:req.params.id}});
-        res.json({message:'Assesssment deleted'});
+        await t_assessment.destroy({where:{id:req.params.id}});
+        res.json({message:'Trainee Assesssment deleted'});
     }catch(err){
         res.status(500).json({ error: err.message });       
     }
