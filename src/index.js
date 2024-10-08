@@ -27,8 +27,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/users', userRoutes); // Mount user routes
-app.use('/api/trainee',traineeRoutes);
-app.use('/api/trainer',trainerRoutes);
+app.use('/api/trainees',traineeRoutes);
+app.use('/api/trainers',trainerRoutes);
 app.use('/api/assessments',assessmentRoutes);
 app.use('/api/roles',rolesRoutes);
 app.use('/api/trainee_assessments',t_assessmentRoutes);
@@ -47,7 +47,7 @@ const startServer = async () => {
         // await Trainee.sync();
         await assessment.sync({force: true});
         await role.sync({force: true});
-        await trainee_assessment.sync({force: true});
+        // await trainee_assessment.sync({force: true});
 
 
         app.listen(PORT, () => {const cors = require('cors');

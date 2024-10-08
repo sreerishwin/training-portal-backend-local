@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Trainee = require('../models/trainee');
-const { Sequelize } = require('sequelize');
+const { Op } = require('sequelize');
 
 // const authenticateToken = require('../middlewares/auth')
 
@@ -33,20 +33,22 @@ router.get('/',async (req, res) => {
     }
 });
 
-router.get('/filterByDate',async (req, res) => {
+router.get('/new/count',async (req, res) => {
     try {
         const currDate = new Date();
+        console.log(currDate);
         currDate.setDate(currDate.getDate()-10);
 
         const trainee = await Trainee.findAll({
             where:{
                 joinedDate:{
-                    [Sequelize.gte]:currDate,
+                    [Op.gte]:currDate,
                 },
             },
         });
-        console.log(currDate)
-        res.json(trainee);
+        console.log(currDate);
+        console.log(trainee)
+        res.json({ count: trainee.length });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
