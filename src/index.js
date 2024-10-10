@@ -1,20 +1,28 @@
 const express = require('express');
-const sequelize = require('./config/database'); 
 const dotenv = require('dotenv');
-const userRoutes = require('./routes/userRoutes');
-const User = require('./models/User'); 
-const traineeRoutes = require('./routes/trainee');
-const Trainee = require('./models/trainee'); 
-const trainerRoutes = require('./routes/trainer');
-const Trainer = require('./models/trainer'); 
-const assessmentRoutes = require('./routes/assessment');
-const assessment = require('./models/assessments'); 
-const rolesRoutes = require('./routes/roles');
-const t_assessmentRoutes = require('./routes/trainee_assessment');
-
-const role = require('./models/roles'); 
-const trainee_assessment = require('./models/trainee_assessments'); 
 const cors = require('cors');
+
+
+const sequelize = require('./config/database'); 
+
+// models
+const User = require('./models/User'); 
+const Trainee = require('./models/trainee'); 
+const Trainer = require('./models/trainer'); 
+const assessment = require('./models/traineeAssessment'); 
+const role = require('./models/roles'); 
+// const assessment = require('./models/traineeAssessment'); 
+
+
+//routes
+const userRoutes = require('./routes/userRoutes');
+const traineeRoutes = require('./routes/trainee');
+const trainerRoutes = require('./routes/trainer');
+// const assessmentRoutes = require('./routes/traineeAssessmentRoutes');
+const rolesRoutes = require('./routes/roles');
+const t_assessmentRoutes = require('./routes/traineeAssessmentRoutes');
+const assessmentRoutes = require('./routes/assessmentRoutes');
+
 
 
 
@@ -29,9 +37,10 @@ app.use(cors());
 app.use('/api/users', userRoutes); // Mount user routes
 app.use('/api/trainees',traineeRoutes);
 app.use('/api/trainers',trainerRoutes);
-app.use('/api/assessments',assessmentRoutes);
+// app.use('/api/assessments',assessmentRoutes);
 app.use('/api/roles',rolesRoutes);
 app.use('/api/trainee_assessments',t_assessmentRoutes);
+app.use('/api/assessments',assessmentRoutes);
 
 
 
@@ -42,12 +51,14 @@ const startServer = async () => {
         console.log('Database connection established successfully.');
 
         // Sync models
-        await User.sync(); 
+        // await User.sync(); 
         // await Trainer.sync({force: true});
         // await Trainee.sync();
-        await assessment.sync({force: true});
-        await role.sync({force: true});
+        // await assessment.sync({force: true});
+        // await role.sync({force: true});
         // await trainee_assessment.sync({force: true});
+
+        await sequelize.sync({ alter: true })
 
 
         app.listen(PORT, () => {const cors = require('cors');

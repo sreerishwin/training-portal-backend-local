@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Trainer = require('../models/trainer');
-const Assessment = require('../models/assessments');
+const Assessment = require('../models/traineeAssessment');
 // const authenticateToken = require('../middlewares/auth')
 
 
@@ -46,6 +46,9 @@ router.post('/:id/assessments',async(req,res)=>{
             status:status,
             created_by: req.params.id
         });
+        await trainee_assessment.create({
+            
+        })
      res.status(200).json({ message: "Assessment Created"});
     }catch{
         res.status(500);

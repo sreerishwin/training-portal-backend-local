@@ -1,24 +1,22 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const { STRING } = require('mysql/lib/protocol/constants/types');
 const Trainee = require('./trainee');
 const Trainer = require('./trainer');
 
-const Assessment = sequelize.define('Assessment',{
-    // id: { type: DataTypes.STRING, primaryKey:true,autoIncrement:true},
-    assessment_name: { type: DataTypes.STRING, allowNull: false },
-    // to: {type:DataTypes.STRING,allowNull:false,references: {
-    //     model: Trainee, 
-    //     key: 'id'
-    //   }},
-    // created_by:{type: DataTypes.STRING, allowNull:false,references: {
-    //     model: Trainer, 
-    //     key: 'id'
-    //   }},
-    description: {type:DataTypes.STRING,allowNull:false},
-    duration: {type:DataTypes.DATE,allowNull:false},
-    status: { type: DataTypes.STRING, allowNull: false },
-},{
-    timestamps:true,
+const Assessment = sequelize.define('Assessments', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    assessment_name: { type: DataTypes.STRING, },
+    description: { type:DataTypes.STRING},
+    duration: {type: DataTypes.STRING},
+    status: {type:DataTypes.ENUM('Active','Inactive')},
+    created_by: {
+        type: DataTypes.INTEGER, allowNull: false, references: {
+            model: Trainer,
+            key: 'id'
+        },
+    },
+}, {
+    timestamps: true,
 });
+
 module.exports = Assessment;
