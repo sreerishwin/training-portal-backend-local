@@ -8,16 +8,16 @@ const TraineeAssessment = require('../models/traineeAssessment');
 const { describe } = require('node:test');
 // const authenticateToken = require('../middlewares/auth')
 
-router.post('/:id',async (req, res) => {
+router.post('/',async (req, res) => {
     try {
-        const { title, description, duration, status } = req.body;
-        const asssessment = await assessments.create({ assessment_name: title, description, duration, status, created_by: req.body});
-        const traineeAssessment = await traineeAssessments.create({ ...req.body, created_by: req.params.id });
+        const assessment = await assessments.create({ ...req.body, assessment_name: req.body.title });
+        const traineeAssessment = await TraineeAssessment.create({ ...req.body, assessment_id: assessment.id, status: req.body.traineeStatus })
         res.status(201).json(assessment);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 router.get('/count',async(req,res)=> {
     try{
@@ -38,7 +38,7 @@ router.get('/',async(req,res) =>{
 });
 
 router.get('/latest',async(req,res) =>{
-    try{
+    try {
         const fetchedAssessments = await assessments.findAll();
         const responseAssessments = await Promise.all(fetchedAssessments.map(async (assessment) => {
             const trainer = await Trainer.findByPk(assessment.created_by);
@@ -49,6 +49,7 @@ router.get('/latest',async(req,res) =>{
         res.status(500).json({error:err.message});
     }
 });
+
 
 router.get("/performance/:trainerId", async (req, res) => {
     try {

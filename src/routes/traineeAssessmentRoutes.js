@@ -5,9 +5,9 @@ const t_assessments = require('../models/traineeAssessment');
 const Trainer = require('../models/trainer');
 // const authenticateToken = require('../middlewares/auth')
 
-router.post('/:id',async (req, res) => {
+router.post('/',async (req, res) => {
     try {
-        const t_assessment = await t_assessments.create({ ...req.body, id: req.params.id });
+        const t_assessment = await t_assessments.create(req.body);
         res.status(201).json(t_assessment);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -104,25 +104,6 @@ router.get('/:id',async(req,res) =>{
     }
 });
 
-// router.get('/trainer/:traineeId',async(req,res) =>{
-//     try {
-//         const traineeid = req.params.traineeId;
-//         const assessments = await t_assessments.findAll({
-//             where: {
-//                 trainee_id: traineeid, 
-//             },attributes:['title','id','due_date']
-//         });
-//         if (assessments.length > 0) {
-            
-//             res.status(200).json({assessments});
-//         } else {
-//             res.status(404).json({ error: 'No assessments found for this trainee.' });
-//         }
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
 
 router.put('/:id',async(req,res)=>{
     try{
@@ -136,7 +117,7 @@ router.put('/:id',async(req,res)=>{
 
 router.delete('/:id',async(req,res)=>{
     try{
-        await t_assessment.destroy({where:{id:req.params.id}});
+        await t_assessments.destroy({where:{id:req.params.id}});
         res.json({message:'Trainee Assesssment deleted'});
     }catch(err){
         res.status(500).json({ error: err.message });       

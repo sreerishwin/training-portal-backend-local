@@ -11,14 +11,12 @@ const Trainee = require('./models/trainee');
 const Trainer = require('./models/trainer'); 
 const assessment = require('./models/traineeAssessment'); 
 const role = require('./models/roles'); 
-// const assessment = require('./models/traineeAssessment'); 
 
 
 //routes
 const userRoutes = require('./routes/userRoutes');
 const traineeRoutes = require('./routes/trainee');
 const trainerRoutes = require('./routes/trainer');
-// const assessmentRoutes = require('./routes/traineeAssessmentRoutes');
 const rolesRoutes = require('./routes/roles');
 const t_assessmentRoutes = require('./routes/traineeAssessmentRoutes');
 const assessmentRoutes = require('./routes/assessmentRoutes');
@@ -37,7 +35,6 @@ app.use(cors());
 app.use('/api/users', userRoutes); // Mount user routes
 app.use('/api/trainees',traineeRoutes);
 app.use('/api/trainers',trainerRoutes);
-// app.use('/api/assessments',assessmentRoutes);
 app.use('/api/roles',rolesRoutes);
 app.use('/api/trainee_assessments',t_assessmentRoutes);
 app.use('/api/assessments',assessmentRoutes);

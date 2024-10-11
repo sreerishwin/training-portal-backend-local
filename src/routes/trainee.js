@@ -10,8 +10,8 @@ const Trainer = require('../models/trainer');
 const { get } = require('http');
 const { create } = require('domain');
 
-// const authenticateToken = require('../middlewares/auth')
-
+const authMiddleware = require('../middlewares/authMiddleware');
+const jwt  = require('jsonwebtoken');
 
 router.post('/',async (req, res) => {
     try {
@@ -87,7 +87,7 @@ router.get('/task/:traineeId', async (req, res) => {
             const trainer = await getTrainerById(assessment.created_by);
             const createdBy = trainer.name;
             console.log("CREATED BY", createdBy)
-            return { ...(tr_assessment.toJSON()), ...(assessment.toJSON()), createdBy: createdBy}
+            return { ...(tr_assessment.toJSON()), ...(assessment.toJSON()), createdBy: createdBy, traineeStatus: tr_assessment.status}
         }));
         console.log("RESTULT", result)
         return res.status(200).json(result);
@@ -112,13 +112,13 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id/remove',async(req,res)=>{
+router.delete('/remove/:id',async(req,res)=>{
     try{
         const traineeId = req.params.id;
         const trainee = await Trainee.findByPk(traineeId);
         if (trainee){
-            if (trainee.status == 'Active'){
-                trainee.status = 'Inactive';
+            if (trainee.status == 'Active' || trainee.status == 'active'){
+                trainee.status = 'Deleted';
                 await trainee.save();
                 res.status(200).send('Updated');
             }else{

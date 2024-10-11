@@ -83,13 +83,30 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    try {
-        await Trainer.destroy({ where: { id: req.params.id } });
-        res.json({ message: 'Trainer deleted' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+
+router.delete('/remove/:id',async(req,res)=>{
+    try{
+        const trainerId = req.params.id;
+        const trainer = await Trainer.findByPk(trainerId);
+        if (trainer){
+            if (trainer.status == 'Active' || trainer.status == 'active'){
+                trainer.status = 'Deleted';
+                await trainer.save();
+                res.status(200).send('Updated');
+            }else{
+                res.send("Trainer not active");
+            }
+        }else{
+            res.send("Trainer not found");
+        }
+
+    }catch(err){
+        res.status(500).json({error:err.message});
     }
+
+    
 });
+
 
 module.exports = router;
