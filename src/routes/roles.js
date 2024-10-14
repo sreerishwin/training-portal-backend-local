@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Roles = require('../models/roles');
-// const authenticateToken = require('../middlewares/auth')
+const authenticateToken = require('../middlewares/authMiddleware')
 
 
 router.post('/', async (req, res) => {

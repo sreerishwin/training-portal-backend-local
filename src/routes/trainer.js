@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Trainer = require('../models/trainer');
+const Assessment = require('../models/traineeAssessment');
 // const authenticateToken = require('../middlewares/auth')
 
 
@@ -20,8 +21,39 @@ router.get('/count',async(req,res)=> {
     }catch(err){
         res.status(500).json({error:err.message});
     }
-    
 });
+
+router.get('/:id/assessments',async(req,res)=>{
+    try{
+        const assess= await Assessment.findAll({
+            where:{
+                created_by: req.params.id
+            }
+        });
+        res.status(200).json(assess);
+    }catch{
+        res.status(500);
+    }
+})
+
+router.post('/:id/assessments',async(req,res)=>{
+    const { title, description, duration, status } = req.body;
+    try{
+        const assess = await Assessment.create({
+            assessment_name: title,
+            description: description,
+            duration: duration,
+            status:status,
+            created_by: req.params.id
+        });
+        await trainee_assessment.create({
+            
+        })
+     res.status(200).json({ message: "Assessment Created"});
+    }catch{
+        res.status(500);
+    }
+})
 
 router.get('/', async (req, res) => {
     try {
@@ -51,13 +83,30 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    try {
-        await Trainer.destroy({ where: { id: req.params.id } });
-        res.json({ message: 'Trainer deleted' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+
+router.delete('/remove/:id',async(req,res)=>{
+    try{
+        const trainerId = req.params.id;
+        const trainer = await Trainer.findByPk(trainerId);
+        if (trainer){
+            if (trainer.status == 'Active' || trainer.status == 'active'){
+                trainer.status = 'Deleted';
+                await trainer.save();
+                res.status(200).send('Updated');
+            }else{
+                res.send("Trainer not active");
+            }
+        }else{
+            res.send("Trainer not found");
+        }
+
+    }catch(err){
+        res.status(500).json({error:err.message});
     }
+
+    
 });
+
 
 module.exports = router;
