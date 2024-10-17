@@ -9,6 +9,7 @@ const Assessment = sequelize.define('Assessments', {
     description: { type:DataTypes.STRING},
     duration: {type: DataTypes.STRING},
     status: {type:DataTypes.ENUM('Active','Inactive')},
+    assessment_type: {type:DataTypes.ENUM('Course','Quiz','Practical session')},
     created_by: {
         type: DataTypes.INTEGER, allowNull: false, references: {
             model: Trainer,

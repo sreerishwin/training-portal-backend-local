@@ -8,11 +8,33 @@ exports.register = async (req, res) => {
         const user = await UserService.register(username, email, password, confirmPassword);
         res.status(201).json({ message: 'User created', userId: user.id });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'Error registering user', error: error.message });
     }
 };
 
 exports.login = async (req, res) => {
+    const syncDatabase = async () => {
+        try {
+            await User.sync({ alter: true }); // Sync the User model
+            console.log('User table synced successfully');
+        } catch (error) {
+            console.error('Error syncing User table:', error);
+        }
+    };
+    
+    const startServer = async () => {
+        try {
+            await syncDatabase(); // Sync before starting the server
+            app.listen(PORT, () => {
+                console.log(`Server is running on http://localhost:${PORT}`); 
+            });
+        } catch (error) {
+            console.error('Unable to connect to the database:', error);
+        }
+    };
+    
+    startServer();
     try {
         const { email, password } = req.body;
         const { token, username, status } = await UserService.login(email, password);

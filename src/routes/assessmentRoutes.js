@@ -18,6 +18,32 @@ router.post('/',async (req, res) => {
     }
 });
 
+//incompleted route
+router.get('/completed/:trainerId',async(req,res)=> {
+    try{
+        const fetchedassessments = await assessments.findAll({
+            where:{
+                created_by:req.params.trainerId
+            }
+        });
+        const taFetchedAssessments = await Promise.all(fetchedassessments.map(async (assessment) => {
+            const traineeAssessments = await TraineeAssessment.findAll({
+                where: {
+                    assessment_id: assessment.id,
+                }
+            });
+            const completed = await traineeAssessments.findAll({
+                where:{
+                    status:'completed'
+                }
+            });
+        }));
+        res.status(200).json({completed : taFetchedAssessments});
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+});
+
 
 router.get('/count',async(req,res)=> {
     try{

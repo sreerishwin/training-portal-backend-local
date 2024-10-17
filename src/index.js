@@ -1,9 +1,10 @@
-const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors');
-
-
+const express = require('express');
 const sequelize = require('./config/database'); 
+
+const authRoutes = require('./routes/authRoutes');
+
+const cors = require('cors');
 
 // models
 const User = require('./models/User'); 
@@ -24,13 +25,21 @@ const assessmentRoutes = require('./routes/assessmentRoutes');
 
 
 
-dotenv.config();
+require ('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+sequelize.sync({alter:true})
 
 app.use(express.json());
 app.use(cors());
+
+
+const PORT = process.env.PORT || 3000;
+
+//NITHISH
+app.use('/api/auth', authRoutes);
+
 
 app.use('/api/users', userRoutes); // Mount user routes
 app.use('/api/trainees',traineeRoutes);
@@ -42,25 +51,21 @@ app.use('/api/assessments',assessmentRoutes);
 
 
 
+
+const syncDatabase = async () => {
+    try {
+        await User.sync({ alter: true }); // Sync the User model
+        console.log('User table synced successfully');
+    } catch (error) {
+        console.error('Error syncing User table:', error);
+    }
+};
+
 const startServer = async () => {
     try {
-        await sequelize.authenticate();
-        console.log('Database connection established successfully.');
-
-        // Sync models
-        // await User.sync(); 
-        // await Trainer.sync({force: true});
-        // await Trainee.sync();
-        // await assessment.sync({force: true});
-        // await role.sync({force: true});
-        // await trainee_assessment.sync({force: true});
-
-        await sequelize.sync({ alter: true })
-
-
-        app.listen(PORT, () => {const cors = require('cors');
-
-            console.log(`Server is running on http://localhost:${PORT}`);
+        await syncDatabase(); // Sync before starting the server
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`); 
         });
     } catch (error) {
         console.error('Unable to connect to the database:', error);
